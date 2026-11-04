@@ -69,7 +69,10 @@
         "url": "https://simonwillison.net/atom/everything/",
         "enabled": true,
         "category": "ai-tools",
-        "profile": "tech-news"
+        "profile": "tech-blog",
+        "content_extractor": "trafilatura",
+        "time_window_hours": 168,
+        "max_items": 8
       },
       {
         "name": "vLLM Blog",
@@ -77,7 +80,9 @@
         "enabled": true,
         "category": "llm-inference",
         "profile": "tech-blog",
-        "content_extractor": "trafilatura"
+        "content_extractor": "trafilatura",
+        "time_window_hours": 168,
+        "max_items": 8
       },
       {
         "name": "Sean Goedecke",
@@ -85,7 +90,9 @@
         "enabled": true,
         "category": "software-engineering",
         "profile": "tech-blog",
-        "content_extractor": "trafilatura"
+        "content_extractor": "trafilatura",
+        "time_window_hours": 168,
+        "max_items": 8
       },
       {
         "name": "CNBC Finance",
@@ -101,7 +108,9 @@
         "enabled": true,
         "category": "cuda",
         "profile": "tech-blog",
-        "content_extractor": "trafilatura"
+        "content_extractor": "trafilatura",
+        "time_window_hours": 168,
+        "max_items": 8
       },
       {
         "name": "LWN.net (subscriber full-text)",
@@ -109,6 +118,26 @@
         "enabled": false,
         "category": "linux",
         "profile": "tech-news"
+      },
+      {
+        "name": "LangChain 工程博客",
+        "url": "https://www.langchain.com/blog/rss.xml",
+        "enabled": true,
+        "category": "agent-engineering",
+        "profile": "tech-blog",
+        "content_extractor": "trafilatura",
+        "time_window_hours": 168,
+        "max_items": 8
+      },
+      {
+        "name": "Spring 官方博客",
+        "url": "https://spring.io/blog.atom",
+        "enabled": true,
+        "category": "backend-engineering",
+        "profile": "tech-blog",
+        "content_extractor": "trafilatura",
+        "time_window_hours": 168,
+        "max_items": 8
       }
     ],
     "reddit": {
@@ -214,6 +243,7 @@
       "tech-blog",
       "finance-news"
     ],
+    "profile_min_items": {"tech-blog": 2},
     "category_groups": {},
     "default_group": "other",
     "default_group_limit": null

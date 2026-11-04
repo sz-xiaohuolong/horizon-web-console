@@ -1,17 +1,19 @@
-# Evaluation goal
+# 评价目标
 
-Evaluate the importance of timely technology news for readers interested in software engineering, artificial intelligence, machine learning, computer systems, hardware, open source, and the technology industry.
+面向后端、Agent 与 RAG 开发者，优先追踪主要模型厂商正式发布的新模型、重大版本、开放权重及 API 可用性变化，同时保留有工程价值的工具动态。
 
-# Scoring rubric
+厂商范围包括 OpenAI、Anthropic、Google / DeepMind、DeepSeek、阿里 Qwen、字节豆包 / Seed、月之暗面 Kimi、MiniMax、智谱 GLM、腾讯混元、百度文心，以及 Meta Llama、Mistral、xAI Grok、Cohere。按事件证据和实际影响评分，不因国别或品牌排除内容。
 
-- **9-10: Groundbreaking.** Major breakthroughs, paradigm shifts, major versions of widely used technology, significant research results, or industry-changing announcements.
-- **7-8: High value.** Important developments worth prompt attention, including technical deep-dives, novel approaches, insightful analysis, and valuable tools or libraries.
-- **5-6: Interesting.** Incremental improvements, useful tutorials, moderate community interest, or developments worth knowing but not urgent.
-- **3-4: Low priority.** Routine updates, common knowledge, shallow treatment, or content dominated by promotion.
-- **0-2: Noise.** Spam, off-topic material, trivial updates, or purely promotional content.
+# 评分标准
 
-# Evaluation guidance
+- **9–10 分：重大变化。** 已确认的旗舰或基础模型发布、重要开源权重、显著改变 Agent / RAG 能力与使用成本的模型升级，以及证据充分的关键工程突破。
+- **7–8 分：高价值。** 正式可用的新模型或重要变体；工具调用、结构化输出、长上下文、多模态、推理与检索能力的实质升级；重要的 Agent 框架、MCP 和开发工具变化。
+- **5–6 分：有用。** 有实际工程收益的增量工具更新、可信的应用评测、值得关注但影响有限的功能变化。
+- **3–4 分：低优先级。** 常规 SDK 补丁、简单改名、重复报道、缺少工程意义的理论推导、空泛宣传或普通非 AI 软件消息。
+- **0–2 分：噪声。** 未证实的发布传言、标题党、广告、无来源的性能或价格断言、与目标无关的内容。
 
-Consider technical depth, novelty, likely impact, source quality, relevance to software engineering and AI systems, and concrete supporting details. Treat substantive community debate as additional evidence of value, but do not equate popularity with technical importance. Do not reward exaggerated headlines.
+# 判断要求
 
-Use three to five specific topic tags.
+区分模型本身发布与客户端 SDK 发版：openai-python、anthropic-sdk-python 等更新不等于推出新模型。区分正式发布、预告、灰度测试和第三方猜测，优先官方公告及可追溯到原始发布的报道。
+
+评分理由说明事件与后端、Agent 或 RAG 开发的关联。长篇架构设计、实现复盘和源码分析主要属于 tech-blog；不要因为标题含“发布”就忽略正文中的工程深度。纯理论研究只有明确工程影响时才提高优先级。使用 3–5 个具体主题标签。

@@ -18,3 +18,7 @@ Cite the exact history result IDs in `source_refs`. Attribute dates to the diges
 # Profile writing rules
 
 Use a short, accurate title of no more than 15 words without clickbait; for languages that do not normally separate words with spaces, use one comparably short phrase. Preserve the product or project name and the distinguishing change. The `summary` block is the main body. Every emitted block must contain complete sentences. Keep blocks concrete and non-overlapping. Avoid stock phrases such as "marks a major milestone" or "will reshape the industry" unless the supplied evidence explains a specific, material effect.
+
+## 模型发布信息
+
+当条目涉及模型发布时，在既有内容块内优先交代来源明确提供的厂商、准确模型名或版本、发布日期、开放权重或 API / 产品可用状态，以及与 Agent / RAG 开发有关的主要变化。上下文长度、价格、许可和性能比较只有原文或检索证据支持时才写，保留单位和比较条件。SDK 发版不能写成新模型发布；预告、测试和正式可用必须区分。

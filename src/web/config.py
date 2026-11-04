@@ -192,7 +192,7 @@ class ConfigStore:
                 baseline = _view_values(raw, known)
                 updated = _merge(raw, patch)
                 # 来源块与可增删的映射使用替换语义，防止删除操作被深合并恢复。
-                for section, field in (("digest", "category_groups"), ("processing", "profile_settings")):
+                for section, field in (("digest", "category_groups"), ("digest", "profile_min_items"), ("processing", "profile_settings")):
                     section_patch = patch.get(section)
                     if isinstance(section_patch, dict) and field in section_patch:
                         updated[section][field] = _restore_hidden(section_patch[field], (raw.get(section) or {}).get(field))

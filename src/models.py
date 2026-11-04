@@ -299,6 +299,8 @@ class RSSSourceConfig(BaseModel):
     category: Optional[str] = None
     content_extractor: Optional[str] = None
     profile: ProfileRoute = None
+    time_window_hours: Optional[int] = Field(default=None, ge=1, le=168)
+    max_items: Optional[int] = Field(default=None, ge=1, le=100)
 
 
 class RedditSubredditConfig(BaseModel):
@@ -595,6 +597,13 @@ class DigestConfig(BaseModel):
     default_group: str = "other"
     default_group_limit: Optional[int] = Field(default=None, gt=0)
     profile_order: List[str] = Field(default_factory=list)
+    profile_min_items: Dict[str, Annotated[int, Field(ge=0, strict=True)]] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def validate_profile_minimum_capacity(self) -> "DigestConfig":
+        if self.max_items is not None and sum(self.profile_min_items.values()) > self.max_items:
+            raise ValueError("各处理配置的最低保留条数之和不能超过速递总上限")
+        return self
 
     @field_validator("profile_order")
     @classmethod

@@ -37,6 +37,20 @@ def client(workspace, monkeypatch):
         yield session
 
 
+def test_profile_minimum_can_be_saved_and_cleared(client, workspace):
+    revision = client.get("/api/config").json()["revision"]
+    saved = client.patch("/api/config", headers=HEADERS, json={
+        "revision": revision, "patch": {"digest": {"profile_min_items": {"tech-blog": 2}}},
+    })
+    assert saved.status_code == 200
+    assert saved.json()["config"]["digest"]["profile_min_items"] == {"tech-blog": 2}
+    cleared = client.patch("/api/config", headers=HEADERS, json={
+        "revision": saved.json()["revision"], "patch": {"digest": {"profile_min_items": {}}},
+    })
+    assert cleared.status_code == 200
+    assert cleared.json()["config"]["digest"]["profile_min_items"] == {}
+
+
 def test_configuration_patch_preserves_env_refs_and_detects_stale_writers(client, workspace):
     root, data, _ = workspace
     initial = client.get("/api/config").json()
@@ -84,7 +98,8 @@ def test_source_patch_restores_redacted_schema_defaults(client, workspace, monke
     assert response.status_code == 200, response.text
     saved = json.loads((data / "config.json").read_text())
     assert saved["sources"]["rss"][0]["name"] == "保存后的离线订阅"
-    assert saved["sources"]["rss"][-1]["url"].endswith("${LWN_KEY}")
+    private_feed = next(source for source in saved["sources"]["rss"] if source["name"] == "LWN.net (subscriber full-text)")
+    assert private_feed["url"].endswith("${LWN_KEY}")
     if full_sources:
         assert saved["sources"]["twitter"]["cookie_dir"] == "data"
         assert saved["sources"]["twitter"]["cookie_file_pattern"] == "x_cookies_*.json"

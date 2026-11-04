@@ -326,6 +326,8 @@ class RunManager:
             if fetched["fetched"]:
                 await stage("scored", lambda: self.service.score_items(run_id=run_id, **kwargs))
                 filtered = await stage("filtered", lambda: self.service.filter_items(run_id=run_id, **kwargs))
+                for profile_id, missing in filtered.get("profile_shortfalls", {}).items():
+                    log.add(f"{profile_id} 最低保留条数尚缺 {missing} 条：合格内容不足或分类配额受限。", "warning")
                 summary_stage = "filtered"
                 if enrich and filtered["kept"] > 0:
                     result = await stage("enriched", lambda: self.service.enrich_items(run_id=run_id, **kwargs))

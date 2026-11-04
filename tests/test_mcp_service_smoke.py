@@ -349,6 +349,7 @@ def test_filter_items_applies_balanced_digest(tmp_path: Path, monkeypatch) -> No
                     items=kept,
                     enabled=True,
                     group_counts={"other": 1},
+                    profile_shortfalls={"tech-blog": 2},
                 ),
             )
 
@@ -365,6 +366,8 @@ def test_filter_items_applies_balanced_digest(tmp_path: Path, monkeypatch) -> No
     assert result["removed_by_balanced_digest"] == 1
     assert result["balanced_digest_enabled"] is True
     assert result["group_counts"] == {"other": 1}
+    assert result["profile_shortfalls"] == {"tech-blog": 2}
+    assert service.run_store.load_meta("run-balanced")["balanced_digest_profile_shortfalls"] == {"tech-blog": 2}
 
 
 def test_filter_items_matches_native_filtering_pipeline(tmp_path: Path, monkeypatch) -> None:

@@ -37,6 +37,19 @@ it('刷新归档会读取同一天被覆盖的报告正文', async () => {
 })
 
 describe('配置草稿与内容安全', () => {
+  it('最低保留数保存到速递规则并保留其他配置', async () => {
+    vi.mocked(fetch).mockImplementation(async (_url, init) => {
+      if (init?.method === 'PATCH') return new Response(JSON.stringify({ detail: '保留草稿' }), { status: 409 })
+      return new Response(JSON.stringify({ revision: '1', config, profiles: [{ id: 'tech-blog', name: '科技博客', threshold: null, topic_dedup: false }] }))
+    })
+    render(<SettingsPage onDirty={() => {}} onSaved={() => {}} />)
+    fireEvent.click(await screen.findByRole('button', { name: '筛选规则' }))
+    fireEvent.change(screen.getByLabelText('科技博客最低保留条数'), { target: { value: '2' } })
+    fireEvent.click(screen.getByRole('button', { name: '保存配置' }))
+    await screen.findByRole('alert')
+    const call = vi.mocked(fetch).mock.calls.find(([, init]) => init?.method === 'PATCH')!
+    expect(JSON.parse(String(call[1]?.body)).patch).toEqual({ digest: { category_groups: {}, profile_min_items: { 'tech-blog': 2 } } })
+  })
   it('高级 JSON 未应用时拒绝切页，原输入仍可恢复', async () => {
     render(<SettingsPage onDirty={() => {}} onSaved={() => {}} />)
     fireEvent.click(await screen.findByRole('button', { name: '高级 JSON' }))

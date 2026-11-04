@@ -166,6 +166,12 @@ class ProfileRegistry:
 
     def validate_digest_references(self, digest: "DigestConfig") -> None:
         """Reject unknown profile IDs in profile-based digest quota groups."""
+        unknown_minimums = set(digest.profile_min_items) - self.ids
+        if unknown_minimums:
+            raise ValueError(
+                "digest.profile_min_items contains unknown profiles "
+                f"({', '.join(sorted(unknown_minimums))})"
+            )
         if digest.group_by != "profile":
             return
         requested = {

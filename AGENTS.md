@@ -104,7 +104,8 @@
 - 唯一文档地图：`DOCUMENT_MAP.md`；当前开发进度：`docs/web-console/PROGRESS.md`。
 - 本次为个人本地 Horizon Web 控制台，用户已授权初始化、实现及浏览器测试；本地开发与验收已获授权；提交、公开仓库推送仅按用户当次明确指令执行，不隐含 PR 或部署。
 - 保留接手时已有改动：`profiles/finance-news/analysis.md`、`profiles/tech-news/analysis.md`、`src/ai/client.py`、`src/models.py`、`src/url_security.py`、`data/config.json.bak`。
-- 验收使用临时数据和伪服务；不自动运行真实付费 AI 流水线，不发送邮件、微信或 webhook。
+- 自动回归优先使用临时数据和伪服务。用户已持续授权在当前任务必要范围内调用已配置的真实信息源和 AI API（包括付费调用）进行测试，可运行真实流水线并生成本地报告，无须重复确认；控制调用范围，记录实际结果与可获得的用量，避免无依据的重复运行。
+- 真实 API 测试授权不包含发送邮件、微信或 webhook；通知发送仍须用户明确授权。凭据、会话、真实配置和运行报告保留本机，不提交到远程仓库。
 
 <!-- vibe-workflow:stack-rules:start -->
 ## 项目技术栈与工程规范
@@ -122,7 +123,7 @@
 - 后端：`uv run --extra dev pytest`；新增聚焦测试位于 `tests/test_web_*.py`。
 - 前端：`npm --prefix web ci`、`npm --prefix web run build`。
 - 本地统一入口（本次实现目标）：`uv run horizon-web --host 127.0.0.1 --port 8765`，构建产物由 FastAPI 同端口托管。
-- 测试不连接真实模型或通知服务；浏览器验证必须有真实运行证据。
+- 自动回归使用伪模型和伪通知；必要的真实模型集成测试按上述持续授权执行，通知发送单独授权；浏览器验证必须有真实运行证据。
 
 ### 黄金规则
 
@@ -144,5 +145,5 @@
 
 ### 待核验事项
 
-- 实际微信扫码和模型调用依赖个人账户及外部服务，由用户最终验收；测试以伪服务覆盖状态机。
+- 实际微信扫码依赖个人账户，由用户完成；状态机使用伪服务验证。真实模型调用可按持续授权直接测试，记录外部服务成功、失败或部分成功的实际证据。
 <!-- vibe-workflow:stack-rules:end -->

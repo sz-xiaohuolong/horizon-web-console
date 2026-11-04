@@ -5,7 +5,7 @@ import hashlib
 import logging
 import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 from email.utils import parsedate_to_datetime
 import httpx
@@ -53,7 +53,11 @@ class RSSScraper(BaseScraper):
                 continue
 
             try:
-                feed_result = await self._fetch_feed(source, since)
+                feed_since = (
+                    datetime.now(timezone.utc) - timedelta(hours=source.time_window_hours)
+                    if source.time_window_hours is not None else since
+                )
+                feed_result = await self._fetch_feed(source, feed_since)
             except Exception as exc:
                 result.fail(source.name, exc)
             else:
@@ -89,7 +93,16 @@ class RSSScraper(BaseScraper):
         if feed.bozo and not feed.entries:
             raise ValueError("Invalid RSS/Atom feed")
 
-        for ordinal, entry in enumerate(feed.entries, start=1):
+        entries = list(enumerate(feed.entries, start=1))
+        if source.max_items is not None:
+            # 限量来源优先采集最新内容，不依赖站点返回的排列顺序。
+            entries.sort(
+                key=lambda pair: self._parse_date(pair[1]) or datetime.min.replace(tzinfo=timezone.utc),
+                reverse=True,
+            )
+        for ordinal, entry in entries:
+            if source.max_items is not None and len(result.items) >= source.max_items:
+                break
             try:
                 published_at = self._parse_date(entry)
                 if not published_at or published_at < since:

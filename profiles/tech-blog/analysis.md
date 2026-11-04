@@ -1,17 +1,23 @@
-# Evaluation goal
+# 评价目标
 
-Evaluate whether a technology blog post rewards careful reading and gives technical readers durable understanding they can transfer to other work. Score the article itself, not the reputation of its author or publisher.
+为后端、Agent 和 RAG 开发求职筛选有工程深度、可用于项目改进与技术面试讨论的文章。评价正文的机制、证据和权衡，不以作者名气、热度或篇幅代替质量。
 
-# Scoring rubric
+# 技术重点
 
-- **9-10: Exceptional.** Develops an original or unusually clear technical insight, supports it with strong evidence or first-hand engineering experience, and materially changes how a practitioner could understand or approach the problem.
-- **7-8: High value.** Provides substantial technical depth, concrete implementation experience, sound reasoning, and useful lessons that transfer beyond the immediate product or project.
-- **5-6: Useful.** Explains a real topic competently but is incremental, narrow, lightly evidenced, or mainly useful to readers already working with the exact technology.
-- **3-4: Shallow.** Repackages familiar material, lists steps without explaining tradeoffs, relies on unsupported claims, or offers little beyond documentation and release notes.
-- **0-2: Noise.** Primarily promotional, misleading, search-optimized filler, off-topic, or too incomplete to support its conclusions.
+1. Java 21、Spring Boot 3、Spring AI、LangChain4j、LangGraph4j；异步与并发、WebFlux / SSE、Redis / MySQL、任务恢复、多租户隔离和微服务治理。
+2. Agent 执行循环、ReAct / Plan-and-Execute、状态图与 DAG、工具并发、多会话调度、长期任务、记忆与上下文压缩、MCP、人工介入、授权与沙箱、失败重试、评测及可观测性。
+3. RAG 与代码库检索：AST / 语义切分、向量与关键词混合检索、召回与重排、查询改写、索引更新、上下文组装、检索评测、延迟和成本优化。
 
-# Evaluation guidance
+Python 或 TypeScript 实现的 LangGraph、LlamaIndex、DeepSeek Harness 等工程，只要设计可迁移到上述方向，同样可以获得高分。不要局限于 Java 品牌关键词。
 
-Consider the clarity of the motivating problem, originality of the central insight, technical depth, quality of evidence, honesty about tradeoffs and limitations, practical specificity, and long-term usefulness. Distinguish measured results from vendor claims and author opinion. Do not reward length by itself, polished marketing language, brand reputation, or novelty without evidence.
+# 评分标准
 
-Use three to five specific topic tags.
+- **9–10 分：突出。** 对重点方向提出清晰且可迁移的架构洞见，有源码、实验或生产经验支撑；讲清约束、失败模式与取舍。
+- **7–8 分：高价值。** Agent / RAG / 后端的深度设计、源码解读、实现复盘或评测，包含具体机制与有效证据。例如 Super-agent 一类多会话调度、权限边界和任务恢复设计，价值来自工程解释而非新项目名称。
+- **5–6 分：有用。** 可信且能迁移到个人项目的教程、工程经验或技术分析，深度有限但具备具体实现和解释。
+- **3–4 分：浅薄。** 罗列框架、复制入门步骤、只有项目介绍或发版清单、泛泛面试八股、缺少推理的营销，或与求职方向关联很弱。
+- **0–2 分：噪声。** 广告、误导、无来源的能力宣称、内容缺失，或完全无关。
+
+# 判断要求
+
+技术博客可以是工程文章，也可以是开源仓库中的完整设计说明；只有一句发布摘要或链接不能算深度内容。区分研究原型、规划和已实现能力；不要给未验证的生产可用性背书。评分理由指出与哪些具体技术重点有关。使用 3–5 个具体主题标签。

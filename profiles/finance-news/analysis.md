@@ -1,17 +1,19 @@
-# Evaluation goal
+# 评价目标
 
-Evaluate whether a financial news item gives readers timely, credible, and materially useful information about the economy, markets, companies, or policy.
+关注全球宏观经济、国际重大事件、美股、A股、黄金和加密货币。保留已有的央行、利率、财政政策和主要资本市场关注点；港股及其他市场在具有全球或中国市场关联时纳入。
 
-# Scoring rubric
+国际事件本身的重要性可以构成入选理由：例如美国中期选举结果、国会控制权变化、重大地缘冲突、停火、制裁及贸易协议。不要求已经出现股价反应，也不臆测它们必然造成某种市场走势。
 
-- **9-10: Systemic.** Major monetary or fiscal policy shifts, severe market disruptions, landmark regulation, or company events with broad economic consequences.
-- **7-8: Important.** Material earnings surprises, major financing or acquisition activity, consequential economic data, or policy changes with a clear effect on an industry or large group of people.
-- **5-6: Useful.** Credible and concrete developments that help readers understand a company, market, or economic trend but have limited breadth or urgency.
-- **3-4: Low value.** Routine price moves, expected results, small transactions, weakly supported forecasts, or reports that lack a meaningful comparison or baseline.
-- **0-2: Noise.** Rumors, promotional investment claims, unexplained numbers, sensational predictions, or content with no reliable financial substance.
+# 评分标准
 
-# Evaluation guidance
+- **9–10 分：系统性事件。** 主要央行利率决议、重大财政或贸易政策、关键通胀和就业数据、重要选举结果、重大国际冲突或协议、系统性市场风险，以及对黄金或加密资产市场结构有重大影响的已确认事件。
+- **7–8 分：重要变化。** 美股和A股的广泛趋势、重要行业政策及龙头财报；黄金的央行储备、实际利率、美元及 ETF 资金变化；比特币、以太坊、稳定币、现货 ETF、加密监管及重大基础设施安全事件。
+- **5–6 分：有用信息。** 有数据和明确时间范围的经济分析、行业景气和资金流变化、可信的市场机制解释。加密资产不因类别本身被降分，也不因价格上涨自动得高分。
+- **3–4 分：低价值。** 日常小幅波动、缺少广泛意义的个股消息、重复行情播报、无证据的泛泛评论。
+- **0–2 分：噪声。** 喊单、荐股、代币营销、未经证实的内幕或传闻、价格必涨必跌的断言、标题党。
 
-Consider the magnitude and breadth of the event, source quality, timeliness, affected groups, and whether the item provides concrete figures with meaningful baselines. Distinguish reported facts from forecasts and opinions. Do not reward a large percentage move without considering the starting value, and do not treat market popularity as economic importance.
+# 判断要求
 
-Use three to five specific topic tags.
+优先有原始数据和可核验来源的报道，包括央行、统计机构、交易所及可信财经媒体。区分事件日期与报道日期、已经发生的结果与预测；选举计票、媒体预测和官方确认不能混写。说明重要性，但不提供买卖建议，不把相关性写成因果关系。
+
+使用 3–5 个具体标签，尽量标明全球宏观、国际事件、美股、A股、黄金或加密货币等所属主题。

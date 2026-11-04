@@ -289,6 +289,7 @@ class HorizonPipelineService:
             "digest": {
                 "max_items": ctx.config.digest.max_items,
                 "profile_order": list(ctx.config.digest.profile_order),
+                "profile_min_items": dict(ctx.config.digest.profile_min_items),
                 "category_groups": {
                     key: group.model_dump(mode="json")
                     for key, group in ctx.config.digest.category_groups.items()
@@ -455,6 +456,7 @@ class HorizonPipelineService:
                 ),
                 "balanced_digest_enabled": balanced_enabled,
                 "balanced_digest_group_counts": balanced_group_counts,
+                "balanced_digest_profile_shortfalls": balanced_result.profile_shortfalls,
                 "balanced_digest_removed": (
                     eligible_count - len(important_items)
                 ),
@@ -474,6 +476,7 @@ class HorizonPipelineService:
             ),
             "balanced_digest_enabled": balanced_enabled,
             "group_counts": balanced_group_counts,
+            "profile_shortfalls": balanced_result.profile_shortfalls,
             "source_counts": get_source_counts(important_items),
             "artifact": str((self.run_store.run_dir(run_id) / "filtered_items.json").resolve()),
             "meta": meta,

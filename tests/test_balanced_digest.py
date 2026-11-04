@@ -188,6 +188,66 @@ def test_max_items_works_without_category_groups() -> None:
     assert [item.id for item in result.items] == ["higher"]
 
 
+def test_profile_minimum_reserves_blogs_before_higher_scoring_news() -> None:
+    digest = DigestConfig(max_items=3, profile_min_items={"tech-blog": 2})
+    items = [
+        make_item("news-top", 10, "ai"),
+        make_item("news-second", 9, "ai"),
+        make_item("blog-top", 6, "ai", profile="tech-blog"),
+        make_item("blog-second", 5, "ai", resolved_profile="tech-blog"),
+        make_item("blog-third", 4, "ai", profile="tech-blog"),
+    ]
+    result = make_orchestrator(digest).apply_balanced_digest(items, log=False)
+    assert [item.id for item in result.items] == ["news-top", "blog-top", "blog-second"]
+    assert result.profile_shortfalls == {}
+
+
+def test_profile_minimum_does_not_bypass_score_threshold_and_reports_shortfall() -> None:
+    orchestrator = make_orchestrator(
+        DigestConfig(max_items=3, profile_min_items={"tech-blog": 2})
+    )
+    items = [
+        make_item("news", 9, "ai"),
+        make_item("blog", 5, "blog", profile="tech-blog"),
+        make_item("irrelevant", 2, "blog", profile="tech-blog"),
+    ]
+    result = asyncio.run(orchestrator.filter_items(items, topic_dedup=False, log=False))
+    assert [item.id for item in result.items] == ["news", "blog"]
+    assert result.balanced_digest.profile_shortfalls == {"tech-blog": 1}
+
+
+def test_profile_minimum_respects_shared_group_cap_and_fills_remaining_slots() -> None:
+    digest = DigestConfig(
+        max_items=3, profile_min_items={"tech-blog": 2},
+        category_groups={"ai": CategoryGroupConfig(limit=1, categories=["ai"])},
+    )
+    items = [
+        make_item("news", 10, "ai"),
+        make_item("finance", 9, "finance", profile="finance-news"),
+        make_item("other", 8, "other"),
+        make_item("blog-1", 6, "ai", profile="tech-blog"),
+        make_item("blog-2", 5, "ai", profile="tech-blog"),
+    ]
+    result = make_orchestrator(digest).apply_balanced_digest(items, log=False)
+    assert [item.id for item in result.items] == ["finance", "other", "blog-1"]
+    assert result.group_counts == {"other": 2, "ai": 1}
+    assert result.profile_shortfalls == {"tech-blog": 1}
+
+
+def test_profile_minimum_without_global_cap_keeps_all_eligible_items() -> None:
+    result = make_orchestrator(DigestConfig(profile_min_items={"tech-blog": 2})).apply_balanced_digest(
+        [make_item("news", 9, "ai")], log=False
+    )
+    assert [item.id for item in result.items] == ["news"]
+    assert result.profile_shortfalls == {"tech-blog": 2}
+
+
+def test_profile_minimum_rejects_unknown_profile() -> None:
+    registry = ProfileRegistry.load(Path("profiles"), "tech-news")
+    with pytest.raises(ValueError, match="unknown profiles"):
+        registry.validate_digest_references(DigestConfig(profile_min_items={"missing": 2}))
+
+
 def test_default_group_limit_works_without_category_groups() -> None:
     filtering = DigestConfig(default_group_limit=1)
     items = [make_item("lower", 7.0, None), make_item("higher", 9.0, None)]
@@ -347,6 +407,9 @@ def test_duplicate_category_warns_and_first_group_wins() -> None:
         {"group_by": "source"},
         {"profile_order": ["tech-news", "tech-news"]},
         {"profile_order": ["tech-news", ""]},
+        {"profile_min_items": {"tech-blog": -1}},
+        {"profile_min_items": {"tech-blog": 1.5}},
+        {"max_items": 1, "profile_min_items": {"tech-blog": 2}},
     ],
 )
 def test_digest_config_rejects_invalid_values(kwargs) -> None:

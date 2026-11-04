@@ -68,7 +68,11 @@ SSE 以 `event: log` 发送日志项，事件 `id` 为递增序号；请求携�
 
 配置 revision 是读取原文件字节的 SHA-256，用于检测外部编辑和过期保存。`patch` 非空，顶层只允许 `collection`、`processing`、`digest`、`sources`、`wechat`；`processing` 只允许 `default_profile/profile_settings`。`sources` 类型必须在既有注册表中。字段由现有 Config 和 ProfileRegistry 校验；采集时间窗为 1–168 小时，评分阈值为 0–10，配额遵循正数约束。
 
-普通对象递归合并；提供的每个 `sources` 类型整体替换该类型，其他类型保留。`digest.category_groups` 和 `processing.profile_settings` 整体替换，空对象用于清空对应映射，因此调用方应提交该映射的完整目标内容。列表和映射替换仍会恢复匹配到的原有隐藏凭据与环境变量引用；新增无法匹配的脱敏占位符或将其移动到另一主机不被接受。
+`digest.profile_min_items` 为处理配置 ID 到非负整数的映射，例如 `{"tech-blog": 2}`；ID 必须已加载，最低条数合计不能超过 `max_items`。先在评分和去重之后预留条目，再按评分补齐，分类上限始终有效。完成筛选后，运行元信息的 `balanced_digest_profile_shortfalls` 记录未满足的数量，Web 运行日志同时给出警告。此字段不代表自动降低评分门槛或跨运行补选。
+
+`sources.rss[]` 支持 `time_window_hours`（1–168 或 null）和 `max_items`（1–100 或 null）。前者以当前时间为基准覆盖运行级时间窗，后者优先采集该时间窗内最新的有效条目；两者省略时保持既有行为。
+
+普通对象递归合并；提供的每个 `sources` 类型整体替换该类型，其他类型保留。`digest.category_groups`、`digest.profile_min_items` 和 `processing.profile_settings` 整体替换，空对象用于清空对应映射，因此调用方应提交该映射的完整目标内容。列表和映射替换仍会恢复匹配到的原有隐藏凭据与环境变量引用；新增无法匹配的脱敏占位符或将其移动到另一主机不被接受。
 
 若多条私密订阅同名且脱敏后的 URL 完全相同，服务无法唯一关联原有凭据。删除、重排或编辑这组条目时返回 `422`，原配置和独立备份均不写入；须先在本地配置中为这些订阅设置不同名称，再重新读取并编辑。
 

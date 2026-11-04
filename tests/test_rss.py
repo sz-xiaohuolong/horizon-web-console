@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import logging
 from unittest.mock import AsyncMock
 from unittest.mock import MagicMock
@@ -50,6 +50,35 @@ def test_rss_ids_are_deterministic() -> None:
     assert first == second
     assert first == "rss:example.com_feed.xml:5e2d5d1e58e94d76"
     assert first_item.profile == "rss-profile"
+
+
+def test_source_window_includes_recent_blog_without_widening_news_window(monkeypatch) -> None:
+    import src.scrapers.rss as rss_module
+
+    class FrozenDatetime(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime(2026, 4, 27, 12, tzinfo=timezone.utc)
+
+    monkeypatch.setattr(rss_module, "datetime", FrozenDatetime)
+    sources = [
+        RSSSourceConfig(name="blog", url="https://example.com/blog", time_window_hours=168),
+        RSSSourceConfig(name="news", url="https://example.com/news"),
+    ]
+    since = FrozenDatetime.now() - timedelta(hours=24)
+    result = asyncio.run(RSSScraper(sources, _make_feed_client(_FEED)).fetch(since))
+    assert [item.metadata["feed_name"] for item in result.items] == ["blog"]
+
+
+def test_source_item_limit_keeps_newest_entries_before_extracting() -> None:
+    older = _FEED.replace("entry-1", "older").replace("Item 1", "Older")
+    newer_item = """<item><guid>newer</guid><title>Newer</title>
+    <link>https://example.com/newer</link>
+    <pubDate>Sat, 25 Apr 2026 12:00:00 GMT</pubDate></item>"""
+    feed = older.replace("</channel>", newer_item + "</channel>")
+    source = RSSSourceConfig(name="blog", url="https://example.com/blog", max_items=1)
+    result = asyncio.run(RSSScraper([source], _make_feed_client(feed)).fetch(_SINCE))
+    assert [item.title for item in result.items] == ["Newer"]
 
 
 def test_timezone_less_pubdate_is_treated_as_utc() -> None:

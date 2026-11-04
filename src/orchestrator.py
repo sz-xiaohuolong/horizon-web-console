@@ -93,6 +93,7 @@ class BalancedDigestResult:
     group_counts: Dict[str, int] = field(default_factory=dict)
     group_limits: Dict[str, Optional[int]] = field(default_factory=dict)
     duplicate_categories: List[str] = field(default_factory=list)
+    profile_shortfalls: Dict[str, int] = field(default_factory=dict)
 
 
 @dataclass
@@ -927,7 +928,7 @@ class HorizonOrchestrator:
         groups = digest.category_groups
         max_items = digest.max_items
 
-        if not groups and max_items is None and digest.default_group_limit is None:
+        if not groups and max_items is None and digest.default_group_limit is None and not digest.profile_min_items:
             return BalancedDigestResult(items=items)
 
         sorted_items = sorted(
@@ -958,7 +959,7 @@ class HorizonOrchestrator:
                     f"groups; using '{first_group}'.[/yellow]"
                 )
 
-        selected: List[tuple[ContentItem, str]] = []
+        candidates: List[tuple[ContentItem, str]] = []
         group_counts: Dict[str, int] = defaultdict(int)
         default_group = digest.default_group
 
@@ -974,20 +975,34 @@ class HorizonOrchestrator:
                 if isinstance(category, str)
                 else default_group
             )
+            candidates.append((item, group_key))
 
-            if group_key in groups:
-                limit = groups[group_key].limit
-            else:
-                limit = digest.default_group_limit
+        selected_indices: set[int] = set()
+        profile_counts: Dict[str, int] = defaultdict(int)
 
-            if limit is not None and group_counts[group_key] >= limit:
-                continue
+        # 先在合格条目中满足最低保留数，再按分数填满；分类上限始终有效。
+        for reserve_only in (True, False):
+            for index, (item, group_key) in enumerate(candidates):
+                if index in selected_indices:
+                    continue
+                if max_items is not None and len(selected_indices) >= max_items:
+                    break
+                profile_id = item.processing.classification.profile if item.processing else ""
+                if reserve_only and profile_counts[profile_id] >= digest.profile_min_items.get(profile_id, 0):
+                    continue
+                limit = groups[group_key].limit if group_key in groups else digest.default_group_limit
+                if limit is not None and group_counts[group_key] >= limit:
+                    continue
+                selected_indices.add(index)
+                group_counts[group_key] += 1
+                profile_counts[profile_id] += 1
 
-            selected.append((item, group_key))
-            group_counts[group_key] += 1
-
-        if max_items is not None:
-            selected = selected[:max_items]
+        selected = [pair for index, pair in enumerate(candidates) if index in selected_indices]
+        profile_shortfalls = {
+            profile_id: minimum - profile_counts[profile_id]
+            for profile_id, minimum in digest.profile_min_items.items()
+            if profile_counts[profile_id] < minimum
+        }
 
         final_counts: Dict[str, int] = defaultdict(int)
         for _, group_key in selected:
@@ -999,6 +1014,10 @@ class HorizonOrchestrator:
         group_limits.setdefault(default_group, digest.default_group_limit)
 
         if log:
+            for profile_id, missing in profile_shortfalls.items():
+                self.console.print(
+                    f"[yellow]{profile_id} 最低保留条数尚缺 {missing} 条：合格内容不足或分类配额受限。[/yellow]"
+                )
             self.console.print(
                 f"{self.icons['balance']} Balanced digest selected "
                 f"{len(selected)}/{len(items)} items"
@@ -1030,6 +1049,7 @@ class HorizonOrchestrator:
             group_counts=dict(final_counts),
             group_limits=group_limits,
             duplicate_categories=sorted(set(duplicate_categories)),
+            profile_shortfalls=profile_shortfalls,
         )
 
     async def _expand_twitter_discussion(self, items: List[ContentItem]) -> None:
