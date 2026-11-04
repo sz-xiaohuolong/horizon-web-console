@@ -35,9 +35,13 @@ ENV/
 
 # Environment variables
 .env
+.env.*
+!.env.example
 
 # Data files (keep structure, ignore content)
 data/config.json
+data/config.json*.bak
+data/config.json*.backup
 data/seen.json
 data/summaries/*.md
 data/subscribers.json
@@ -46,6 +50,7 @@ data/mcp-secrets.json
 data/mcp-runs/
 data/x_cookies_*.json
 data/wechat_session.json
+data/wechat-deliveries/
 
 docs/_posts/*.md
 
@@ -63,3 +68,13 @@ logs/*.log
 todo.txt
 .ruff_cache
 .pytest_cache
+
+# 本地控制台构建、依赖和运行资料
+web/node_modules/
+web/dist/
+web/*.tsbuildinfo
+data/.horizon-run.lock
+data/config.json.web-*.bak
+.evidence/
+.impeccable/review/
+.hallmark/

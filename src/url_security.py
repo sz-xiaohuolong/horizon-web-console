@@ -9,6 +9,29 @@ from urllib.parse import urljoin, urlsplit
 
 import httpx
 
+SYSTEM_DNS_TIMEOUT = 2.0
+
+
+async def _resolve_https(hostname: str) -> set[str]:
+    """系统 DNS 不可用时，沿 HTTP 代理查询公网 DNS，仍校验全部地址。"""
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            async def query(kind: str) -> set[str]:
+                response = await client.get(
+                    "https://dns.google/resolve",
+                    params={"name": hostname, "type": kind, "edns_client_subnet": "0.0.0.0/0"},
+                )
+                response.raise_for_status()
+                payload = response.json()
+                if payload.get("Status") != 0:
+                    raise ValueError("DNS 查询未成功")
+                return {str(row["data"]) for row in payload.get("Answer", []) if row.get("type") in {1, 28}}
+
+            answers = await asyncio.wait_for(asyncio.gather(query("A"), query("AAAA")), timeout=6.0)
+            return set().union(*answers)
+    except (httpx.HTTPError, ValueError, KeyError, TypeError, AttributeError, asyncio.TimeoutError) as exc:
+        raise UnsafeURLError(f"无法安全解析主机名：{hostname}") from exc
+
 
 class UnsafeURLError(ValueError):
     """Raised when a URL may target a non-public network resource."""
@@ -42,14 +65,12 @@ async def _resolve_hostname(hostname: str, port: int) -> set[str]:
         literal = ipaddress.ip_address(hostname)
     except ValueError:
         try:
-            results = await asyncio.to_thread(
-                socket.getaddrinfo,
-                hostname,
-                port,
-                type=socket.SOCK_STREAM,
+            results = await asyncio.wait_for(
+                asyncio.to_thread(socket.getaddrinfo, hostname, port, type=socket.SOCK_STREAM),
+                timeout=SYSTEM_DNS_TIMEOUT,
             )
-        except socket.gaierror as exc:
-            raise UnsafeURLError(f"Could not resolve hostname: {hostname}") from exc
+        except (socket.gaierror, asyncio.TimeoutError):
+            return await _resolve_https(hostname)
         return {str(result[4][0]) for result in results}
     return {str(literal)}
 

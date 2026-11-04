@@ -32,6 +32,19 @@
 
 </div>
 
+## 本地 Web 控制台
+
+新增个人观测控制台，可检查流水线阶段和日志、阅读历史速递、调整配置及管理微信连接。
+
+```bash
+uv sync --extra dev
+npm --prefix web ci
+npm --prefix web run build
+uv run horizon-web --host 127.0.0.1 --port 8765
+```
+
+浏览器打开 `http://127.0.0.1:8765`。完整操作与排错见 [控制台使用指南](docs/web-console/README.md)，开发文档见 [文档地图](DOCUMENT_MAP.md)。Web 运行只生成速递；外部定时任务仍由原系统管理。
+
 ## 截图
 
 <table>

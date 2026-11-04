@@ -5,12 +5,20 @@ import sys
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import httpx
+import pytest
 
 from src.extractors import TrafilaturaExtractor
 from src.extractors.trafilatura import ARTICLE_HEADERS
 from src.models import TrafilaturaExtractorConfig
 
 URL = "https://example.com/article"
+
+
+@pytest.fixture(autouse=True)
+def isolated_dns():
+    """正文提取测试使用固定公网解析，DNS 安全由专门测试覆盖。"""
+    with patch("src.url_security._resolve_hostname", new=AsyncMock(return_value={"93.184.216.34"})):
+        yield
 
 
 def _extractor() -> TrafilaturaExtractor:

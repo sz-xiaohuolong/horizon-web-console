@@ -1,3 +1,9 @@
+## Horizon Web 控制台
+
+本仓库基于 [Thysrael/Horizon](https://github.com/Thysrael/Horizon) 二次开发，新增 FastAPI + React + Tailwind 本地控制台：流水线观测、历史报告、配置管理、微信连接及手动推送。保留原项目 MIT 许可证和版权声明。
+
+启动与配置请阅读 [中文控制台指南](docs/web-console/README.md)。仓库只包含源码、示例配置和开发文档；真实配置、密钥、微信会话、个人模型服务设置、运行报告和验收截图均不随源码发布。以下保留上游项目说明。
+
 <div align="center">
 <h1>🌅 Horizon</h1>
 

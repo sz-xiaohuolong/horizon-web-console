@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T09:31:50+00:00",
+  "title": "Horizon 控制台设计系统",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "琥珀信号",
+        "canonical": "oklch(82% 0.15 80)"
+      },
+      "cool": {
+        "role": "secondary",
+        "displayName": "冷蓝数据",
+        "canonical": "oklch(77% 0.12 245)"
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "石墨页面",
+        "canonical": "oklch(17% 0.008 250)"
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "操作表面",
+        "canonical": "oklch(21% 0.009 250)"
+      },
+      "paper-3": {
+        "role": "neutral",
+        "displayName": "深色检查面",
+        "canonical": "oklch(13.5% 0.007 250)"
+      },
+      "ok": {
+        "role": "success",
+        "displayName": "完成状态",
+        "canonical": "oklch(76% 0.15 150)"
+      },
+      "bad": {
+        "role": "error",
+        "displayName": "错误状态",
+        "canonical": "oklch(70% 0.17 25)"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "页面标题",
+        "purpose": "中文工作区主标题，采用本地无衬线字体。"
+      },
+      "section": {
+        "displayName": "分区标题",
+        "purpose": "面板和检查器分区，保持紧凑层级。"
+      },
+      "body": {
+        "displayName": "通用正文",
+        "purpose": "说明、状态和表单的基本阅读尺度。"
+      },
+      "label": {
+        "displayName": "控件标签",
+        "purpose": "导航、按钮与字段标签。"
+      },
+      "caption": {
+        "displayName": "辅助文字",
+        "purpose": "状态标记、元信息与阶段提示。"
+      },
+      "metric": {
+        "displayName": "流水线数量",
+        "purpose": "等宽数字展示实测数量，不制造未知值。"
+      },
+      "log": {
+        "displayName": "运行日志",
+        "purpose": "等宽排版让时间、级别和消息可扫描。"
+      },
+      "reading": {
+        "displayName": "速递阅读",
+        "purpose": "较宽松的行高适合中文长文。"
+      }
+    },
+    "shadows": [
+      {
+        "name": "card",
+        "value": "none",
+        "purpose": "默认无阴影，依靠表面、细线和间距建立层次。"
+      }
+    ],
+    "motion": [
+      {
+        "name": "micro",
+        "value": "120ms",
+        "purpose": "常规颜色与边界的状态过渡。"
+      },
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "常规状态过渡的已用缓动曲线。"
+      },
+      {
+        "name": "press",
+        "value": "translateY(1px)",
+        "purpose": "可用按钮按下时的轻微位移。"
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "应用将动画与过渡压缩为 0.01ms；独立预览直接关闭过渡。"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile-max",
+        "value": "640px"
+      },
+      {
+        "name": "stack-max",
+        "value": "960px"
+      },
+      {
+        "name": "compact-max",
+        "value": "1200px"
+      },
+      {
+        "name": "wide-min",
+        "value": "1600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "主要按钮",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "保存配置等当前页主要动作；示例只展示控件样式。",
+      "html": "<button class=\"ds-button-primary\" type=\"button\">保存配置</button>",
+      "css": ".ds-button-primary { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs, 8px); min-height: 40px; padding: var(--space-xs, 8px) var(--space-md, 16px); border: 1px solid var(--color-accent, oklch(82% 0.15 80)); border-radius: var(--radius-pill, 6px); background: var(--color-accent, oklch(82% 0.15 80)); color: var(--color-accent-ink, oklch(18% 0.04 75)); font-family: var(--font-body, \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif); font-size: var(--text-sm, 0.875rem); font-weight: 500; line-height: 1.55; white-space: nowrap; cursor: pointer; transition: background-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); }\n.ds-button-primary:hover:not(:disabled) { background: var(--color-accent-hover, oklch(88% 0.13 80)); }\n.ds-button-primary:focus-visible { outline: 2px solid var(--color-focus, oklch(82% 0.15 80)); outline-offset: 3px; }\n.ds-button-primary:active:not(:disabled) { transform: translateY(1px); }\n.ds-button-primary:disabled { opacity: .55; cursor: not-allowed; }\n.ds-button-primary[aria-busy=\"true\"] { cursor: progress; }\n@media (max-width: 640px) { .ds-button-primary { min-height: 44px; padding-inline: var(--space-sm, 12px); font-size: 14px; } }\n@media (prefers-reduced-motion: reduce) { .ds-button-primary { transition: none; } }"
+    },
+    {
+      "name": "次要按钮",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "刷新、重试等次级动作，与主要按钮共享高度和焦点方式。",
+      "html": "<button class=\"ds-button-secondary\" type=\"button\">刷新</button>",
+      "css": ".ds-button-secondary { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs, 8px); min-height: 40px; padding: var(--space-xs, 8px) var(--space-md, 16px); border: 1px solid var(--color-rule-2, oklch(42% 0.012 250)); border-radius: var(--radius-pill, 6px); background: var(--color-paper-2, oklch(21% 0.009 250)); color: var(--color-ink, oklch(95% 0.005 250)); font-family: var(--font-body, \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif); font-size: var(--text-sm, 0.875rem); font-weight: 500; line-height: 1.55; white-space: nowrap; cursor: pointer; transition: background-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); }\n.ds-button-secondary:hover:not(:disabled) { background: var(--color-rule, oklch(31% 0.01 250)); }\n.ds-button-secondary:focus-visible { outline: 2px solid var(--color-focus, oklch(82% 0.15 80)); outline-offset: 3px; }\n.ds-button-secondary:active:not(:disabled) { transform: translateY(1px); }\n.ds-button-secondary:disabled { opacity: .55; cursor: not-allowed; }\n.ds-button-secondary[aria-busy=\"true\"] { cursor: progress; }\n@media (max-width: 640px) { .ds-button-secondary { min-height: 44px; padding-inline: var(--space-sm, 12px); font-size: 14px; } }\n@media (prefers-reduced-motion: reduce) { .ds-button-secondary { transition: none; } }"
+    },
+    {
+      "name": "带标签输入",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "配置与筛选共用的深色输入表面，示例具有显式标签。",
+      "html": "<label class=\"ds-field\">订阅名称<input class=\"ds-field-input\" type=\"text\" name=\"subscription-name\" placeholder=\"输入易于识别的名称\" autocomplete=\"off\"></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: var(--space-xs, 8px); width: min(320px, 100%); color: var(--color-ink-2, oklch(83% 0.008 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; font-size: var(--text-sm, 0.875rem); line-height: 1.55; }\n.ds-field-input { box-sizing: border-box; width: 100%; min-width: 0; min-height: 40px; padding: var(--space-xs, 8px) var(--space-sm, 12px); border: 1px solid var(--color-rule-2, oklch(42% 0.012 250)); border-radius: var(--radius-pill, 6px); background: var(--color-paper-3, oklch(13.5% 0.007 250)); color: var(--color-ink, oklch(95% 0.005 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; font-size: var(--text-md, 1rem); line-height: 1.55; caret-color: var(--color-accent, oklch(82% 0.15 80)); transition: background-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); }\n.ds-field-input::placeholder { color: var(--color-muted, oklch(71% 0.01 250)); }\n.ds-field-input:hover:not(:disabled) { border-color: var(--color-muted, oklch(71% 0.01 250)); }\n.ds-field-input:focus-visible { outline: 2px solid var(--color-focus, oklch(82% 0.15 80)); outline-offset: -3px; }\n.ds-field-input:disabled { opacity: .55; cursor: not-allowed; }\n@media (max-width: 640px) { .ds-field-input { min-height: 44px; font-size: 16px; } }\n@media (prefers-reduced-motion: reduce) { .ds-field-input { transition: none; } }"
+    },
+    {
+      "name": "顶部导航",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "五个真实目的地与当前页下边界；链接保留应用已有查询参数。",
+      "html": "<nav class=\"ds-nav\" aria-label=\"主要导航\"><a class=\"ds-nav-link\" href=\"?view=overview\" aria-current=\"page\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M22 12h-4l-3 9L9 3l-3 9H2\"/></svg>观测台</a><a class=\"ds-nav-link\" href=\"?view=runs\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 12a9 9 0 1 0 2.5-6.2L3 8\"/><path d=\"M3 3v5h5M12 7v5l4 2\"/></svg>运行记录</a><a class=\"ds-nav-link\" href=\"?view=summaries\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z\"/></svg>历史速递</a><a class=\"ds-nav-link\" href=\"?view=settings\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 7h-9M14 17H5M20 17h-2M6 7H4\"/><circle cx=\"8\" cy=\"7\" r=\"3\"/><circle cx=\"16\" cy=\"17\" r=\"3\"/></svg>配置</a><a class=\"ds-nav-link\" href=\"?view=wechat\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4.9 19.1a10 10 0 0 1 0-14.2M7.8 16.2a6 6 0 0 1 0-8.4M16.2 7.8a6 6 0 0 1 0 8.4M19.1 4.9a10 10 0 0 1 0 14.2\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/></svg>微信连接</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: stretch; gap: var(--space-2xs, 4px); min-height: 78px; max-width: 100%; overflow-x: auto; border-bottom: 1px solid var(--color-rule, oklch(31% 0.01 250)); background: var(--color-header, oklch(18.5% 0.008 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; }\n.ds-nav-link { box-sizing: border-box; display: flex; align-items: center; flex-shrink: 0; gap: var(--space-xs, 8px); padding: 0 var(--space-md, 16px); margin-bottom: -1px; border-bottom: 2px solid transparent; color: var(--color-muted, oklch(71% 0.01 250)); font-size: var(--text-sm, 0.875rem); line-height: 1.55; text-decoration: none; white-space: nowrap; transition: background-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); }\n.ds-nav-link > svg { display: block; flex-shrink: 0; }\n.ds-nav-link:hover { color: var(--color-ink, oklch(95% 0.005 250)); }\n.ds-nav-link[aria-current=\"page\"] { color: var(--color-ink, oklch(95% 0.005 250)); border-bottom-color: var(--color-accent, oklch(82% 0.15 80)); }\n.ds-nav-link:focus-visible { outline: 2px solid var(--color-focus, oklch(82% 0.15 80)); outline-offset: 3px; }\n@media (max-width: 960px) { .ds-nav { min-height: 54px; gap: var(--space-xs, 8px); } }\n@media (max-width: 640px) { .ds-nav { gap: 0; } .ds-nav-link { min-height: 48px; padding-inline: var(--space-sm, 12px); font-size: 14px; } .ds-nav-link:first-child { padding-left: 0; padding-right: var(--space-md, 16px); } .ds-nav-link > svg { display: none; } }\n@media (prefers-reduced-motion: reduce) { .ds-nav-link { transition: none; } }"
+    },
+    {
+      "name": "状态标记",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "完成、运行中、失败、未记录四种静态样式；文字明确含义，标记不可点击。",
+      "html": "<div class=\"ds-badge-samples\" aria-label=\"状态标记样式示例\"><span class=\"ds-badge ds-badge-ok\">已完成</span><span class=\"ds-badge ds-badge-accent\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 11a9 9 0 0 1 15.5-6.3L21 7M21 3v4h-4M21 13a9 9 0 0 1-15.5 6.3L3 17M3 21v-4h4\"/></svg>运行中</span><span class=\"ds-badge ds-badge-bad\">失败</span><span class=\"ds-badge\">未记录</span></div>",
+      "css": ".ds-badge-samples { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-xs, 8px); }\n.ds-badge { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2xs, 4px); width: fit-content; min-height: 24px; padding: var(--space-3xs, 2px) var(--space-xs, 8px); border: 1px solid var(--color-rule, oklch(31% 0.01 250)); border-radius: 4px; background: var(--color-paper-2, oklch(21% 0.009 250)); color: var(--color-muted, oklch(71% 0.01 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; font-size: var(--text-xs, 0.75rem); line-height: 1.4; white-space: nowrap; }\n.ds-badge > svg { display: block; flex-shrink: 0; }\n.ds-badge-ok { color: var(--color-ok, oklch(76% 0.15 150)); background: var(--color-ok-soft, oklch(24.5% 0.03 150)); border-color: var(--color-ok-border, oklch(36% 0.045 150)); }\n.ds-badge-accent { color: var(--color-accent, oklch(82% 0.15 80)); background: var(--color-accent-soft, oklch(29% 0.05 80)); border-color: var(--color-accent-border, oklch(43% 0.06 80)); }\n.ds-badge-bad { color: var(--color-bad, oklch(70% 0.17 25)); background: var(--color-bad-soft, oklch(24.5% 0.035 25)); border-color: var(--color-bad-border, oklch(38% 0.055 25)); }"
+    },
+    {
+      "name": "四阶段流水线",
+      "kind": "custom",
+      "refersTo": "pipeline-stage",
+      "description": "使用真实阶段名称的诚实空态；无工件时按钮禁用，CSS 同时保留可用与选择状态。",
+      "html": "<div class=\"ds-pipeline\" aria-label=\"流水线阶段空态\"><button class=\"ds-stage\" type=\"button\" aria-label=\"查看采集阶段\" aria-pressed=\"false\" disabled><span class=\"ds-stage-label\"><span class=\"ds-stage-number\">1</span>采集</span><strong class=\"ds-stage-count\">—<small class=\"ds-stage-unit\">条</small></strong><span class=\"ds-stage-hint\">原始信息</span></button><button class=\"ds-stage\" type=\"button\" aria-label=\"查看评分阶段\" aria-pressed=\"false\" disabled><span class=\"ds-stage-label\"><span class=\"ds-stage-number\">2</span>评分</span><strong class=\"ds-stage-count\">—<small class=\"ds-stage-unit\">条</small></strong><span class=\"ds-stage-hint\">AI 相关性</span></button><button class=\"ds-stage\" type=\"button\" aria-label=\"查看筛选阶段\" aria-pressed=\"false\" disabled><span class=\"ds-stage-label\"><span class=\"ds-stage-number\">3</span>筛选</span><strong class=\"ds-stage-count\">—<small class=\"ds-stage-unit\">条</small></strong><span class=\"ds-stage-hint\">去重与配额</span></button><button class=\"ds-stage\" type=\"button\" aria-label=\"查看补充阶段\" aria-pressed=\"false\" disabled><span class=\"ds-stage-label\"><span class=\"ds-stage-number\">4</span>补充</span><strong class=\"ds-stage-count\">—<small class=\"ds-stage-unit\">条</small></strong><span class=\"ds-stage-hint\">深度上下文</span></button></div>",
+      "css": ".ds-pipeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; width: 100%; color: var(--color-ink, oklch(95% 0.005 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; }\n.ds-stage { position: relative; display: flex; align-items: flex-start; flex-direction: column; min-width: 0; padding: var(--space-md, 16px) var(--space-lg, 24px); margin-block: var(--space-xs, 8px) var(--space-lg, 24px); border: 0; border-left: 1px solid var(--color-rule, oklch(31% 0.01 250)); background: transparent; color: var(--color-ink-2, oklch(83% 0.008 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; line-height: 1.55; text-align: left; cursor: pointer; transition: background-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); }\n.ds-stage:first-child { border-left: 0; padding-left: 0; }\n.ds-stage:hover:not(:disabled) { background: var(--color-paper-3, oklch(13.5% 0.007 250)); }\n.ds-stage:focus-visible { outline: 2px solid var(--color-focus, oklch(82% 0.15 80)); outline-offset: 3px; }\n.ds-stage:active:not(:disabled) { transform: translateY(1px); }\n.ds-stage:disabled { opacity: .6; color: var(--color-muted, oklch(71% 0.01 250)); cursor: not-allowed; }\n.ds-stage-label { display: flex; align-items: center; gap: var(--space-xs, 8px); font-size: var(--text-sm, 0.875rem); }\n.ds-stage-number { color: var(--color-muted, oklch(71% 0.01 250)); font-family: \"SFMono-Regular\", Consolas, \"Liberation Mono\", ui-monospace, monospace; font-size: var(--text-xs, 0.75rem); }\n.ds-stage-count { display: flex; align-items: baseline; gap: var(--space-xs, 8px); margin-top: var(--space-md, 16px); color: var(--color-ink, oklch(95% 0.005 250)); font-family: \"SFMono-Regular\", Consolas, \"Liberation Mono\", ui-monospace, monospace; font-size: 36px; font-weight: 400; line-height: 1.25; font-variant-numeric: tabular-nums; }\n.ds-stage-unit { color: var(--color-muted, oklch(71% 0.01 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; font-size: var(--text-xs, 0.75rem); }\n.ds-stage-hint { margin-top: var(--space-xs, 8px); color: var(--color-muted, oklch(71% 0.01 250)); font-size: var(--text-xs, 0.75rem); }\n.ds-stage[aria-pressed=\"true\"] .ds-stage-label, .ds-stage-current .ds-stage-label { color: var(--color-accent, oklch(82% 0.15 80)); }\n.ds-stage[aria-pressed=\"true\"]::after, .ds-stage-current::after { content: \"\"; position: absolute; bottom: -8px; left: 24px; right: 24px; height: 2px; background: var(--color-accent, oklch(82% 0.15 80)); }\n.ds-stage:first-child[aria-pressed=\"true\"]::after { left: 0; }\n@media (max-width: 640px) { .ds-pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ds-stage { padding: var(--space-md, 16px) var(--space-20, 20px); margin: 0 0 var(--space-md, 16px); } .ds-stage:nth-child(3) { border-left: 0; padding-left: 0; } .ds-stage:nth-child(n + 3) { border-top: 1px solid var(--color-rule, oklch(31% 0.01 250)); padding-top: var(--space-lg, 24px); } .ds-stage-count { font-size: 31px; margin-top: var(--space-xs, 8px); } }\n@media (prefers-reduced-motion: reduce) { .ds-stage { transition: none; } }"
+    },
+    {
+      "name": "流水线面板",
+      "kind": "card",
+      "refersTo": "pipeline-panel",
+      "description": "分区标题、平面容器和阶段检查的完整组合；示例不包含实测数量。",
+      "html": "<section class=\"ds-pipeline-panel\" aria-label=\"流水线观测面板样式示例\"><div class=\"ds-panel-heading\"><h2 class=\"ds-panel-title\">流水线观测</h2><span class=\"ds-panel-caption\">等待首次运行</span></div><div class=\"ds-pipeline\" aria-label=\"流水线阶段空态\"><button class=\"ds-stage\" type=\"button\" aria-label=\"查看采集阶段\" aria-pressed=\"false\" disabled><span class=\"ds-stage-label\"><span class=\"ds-stage-number\">1</span>采集</span><strong class=\"ds-stage-count\">—<small class=\"ds-stage-unit\">条</small></strong><span class=\"ds-stage-hint\">原始信息</span></button><button class=\"ds-stage\" type=\"button\" aria-label=\"查看评分阶段\" aria-pressed=\"false\" disabled><span class=\"ds-stage-label\"><span class=\"ds-stage-number\">2</span>评分</span><strong class=\"ds-stage-count\">—<small class=\"ds-stage-unit\">条</small></strong><span class=\"ds-stage-hint\">AI 相关性</span></button><button class=\"ds-stage\" type=\"button\" aria-label=\"查看筛选阶段\" aria-pressed=\"false\" disabled><span class=\"ds-stage-label\"><span class=\"ds-stage-number\">3</span>筛选</span><strong class=\"ds-stage-count\">—<small class=\"ds-stage-unit\">条</small></strong><span class=\"ds-stage-hint\">去重与配额</span></button><button class=\"ds-stage\" type=\"button\" aria-label=\"查看补充阶段\" aria-pressed=\"false\" disabled><span class=\"ds-stage-label\"><span class=\"ds-stage-number\">4</span>补充</span><strong class=\"ds-stage-count\">—<small class=\"ds-stage-unit\">条</small></strong><span class=\"ds-stage-hint\">深度上下文</span></button></div><div class=\"ds-panel-bottom\">运行后可点击阶段，检查条目与评分原因。</div></section>",
+      "css": ".ds-pipeline-panel { min-width: 0; padding: var(--space-lg, 24px) var(--space-lg, 24px) 0; border: 1px solid var(--color-rule, oklch(31% 0.01 250)); border-radius: var(--radius-card, 10px); background: var(--color-paper-2, oklch(21% 0.009 250)); color: var(--color-ink, oklch(95% 0.005 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; line-height: 1.55; }\n.ds-panel-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-md, 16px); margin-bottom: var(--space-20, 20px); }\n.ds-panel-title { margin: 0; font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; font-size: var(--text-md, 1rem); font-weight: 500; line-height: 1.4; letter-spacing: -.01em; }\n.ds-panel-caption { color: var(--color-muted, oklch(71% 0.01 250)); font-size: var(--text-xs, 0.75rem); }\n.ds-panel-bottom { padding-block: var(--space-sm, 12px); border-top: 1px solid var(--color-rule, oklch(31% 0.01 250)); color: var(--color-muted, oklch(71% 0.01 250)); font-size: var(--text-xs, 0.75rem); overflow-wrap: anywhere; }\n@media (max-width: 640px) { .ds-pipeline-panel { padding: var(--space-20, 20px) var(--space-md, 16px) 0; } .ds-panel-bottom { line-height: 1.8; } }\n.ds-pipeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; width: 100%; color: var(--color-ink, oklch(95% 0.005 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; }\n.ds-stage { position: relative; display: flex; align-items: flex-start; flex-direction: column; min-width: 0; padding: var(--space-md, 16px) var(--space-lg, 24px); margin-block: var(--space-xs, 8px) var(--space-lg, 24px); border: 0; border-left: 1px solid var(--color-rule, oklch(31% 0.01 250)); background: transparent; color: var(--color-ink-2, oklch(83% 0.008 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; line-height: 1.55; text-align: left; cursor: pointer; transition: background-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--dur-micro, 120ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); }\n.ds-stage:first-child { border-left: 0; padding-left: 0; }\n.ds-stage:hover:not(:disabled) { background: var(--color-paper-3, oklch(13.5% 0.007 250)); }\n.ds-stage:focus-visible { outline: 2px solid var(--color-focus, oklch(82% 0.15 80)); outline-offset: 3px; }\n.ds-stage:active:not(:disabled) { transform: translateY(1px); }\n.ds-stage:disabled { opacity: .6; color: var(--color-muted, oklch(71% 0.01 250)); cursor: not-allowed; }\n.ds-stage-label { display: flex; align-items: center; gap: var(--space-xs, 8px); font-size: var(--text-sm, 0.875rem); }\n.ds-stage-number { color: var(--color-muted, oklch(71% 0.01 250)); font-family: \"SFMono-Regular\", Consolas, \"Liberation Mono\", ui-monospace, monospace; font-size: var(--text-xs, 0.75rem); }\n.ds-stage-count { display: flex; align-items: baseline; gap: var(--space-xs, 8px); margin-top: var(--space-md, 16px); color: var(--color-ink, oklch(95% 0.005 250)); font-family: \"SFMono-Regular\", Consolas, \"Liberation Mono\", ui-monospace, monospace; font-size: 36px; font-weight: 400; line-height: 1.25; font-variant-numeric: tabular-nums; }\n.ds-stage-unit { color: var(--color-muted, oklch(71% 0.01 250)); font-family: \"Host Grotesk\", \"PingFang SC\", \"Microsoft YaHei\", ui-sans-serif, system-ui, sans-serif; font-size: var(--text-xs, 0.75rem); }\n.ds-stage-hint { margin-top: var(--space-xs, 8px); color: var(--color-muted, oklch(71% 0.01 250)); font-size: var(--text-xs, 0.75rem); }\n.ds-stage[aria-pressed=\"true\"] .ds-stage-label, .ds-stage-current .ds-stage-label { color: var(--color-accent, oklch(82% 0.15 80)); }\n.ds-stage[aria-pressed=\"true\"]::after, .ds-stage-current::after { content: \"\"; position: absolute; bottom: -8px; left: 24px; right: 24px; height: 2px; background: var(--color-accent, oklch(82% 0.15 80)); }\n.ds-stage:first-child[aria-pressed=\"true\"]::after { left: 0; }\n@media (max-width: 640px) { .ds-pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ds-stage { padding: var(--space-md, 16px) var(--space-20, 20px); margin: 0 0 var(--space-md, 16px); } .ds-stage:nth-child(3) { border-left: 0; padding-left: 0; } .ds-stage:nth-child(n + 3) { border-top: 1px solid var(--color-rule, oklch(31% 0.01 250)); padding-top: var(--space-lg, 24px); } .ds-stage-count { font-size: 31px; margin-top: var(--space-xs, 8px); } }\n@media (prefers-reduced-motion: reduce) { .ds-stage { transition: none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "可检查的流水线，克制的操作台",
+    "overview": "石墨灰表面、细线分区、琥珀色操作和冷蓝色数据，共同构成面向日常观测的 Console 界面。采集、评分、筛选、补充四个阶段串联真实工件，条目列表和日志帮助用户追查结果与失败原因。\n\n本规范约束个人本地 Horizon 控制台，沿用 Hallmark 2.0.0 Console 主题（第 2/3 个候选）与 Impeccable Operate 方向。产品上下文见 [PRODUCT.md](PRODUCT.md)，实现 token 以 `web/src/tokens.css` 为事实源；本次提取记录实际组件与最终覆盖值，后续修改须同步更新。",
+    "keyCharacteristics": [
+      "可选择的流水线阶段是核心识别特征，检查真实条目及评分原因。",
+      "平面表面与细线建立层次，数据表优先于重复指标卡。",
+      "颜色、文字、图标共同表达状态，缺失数据保留为未知。",
+      "桌面检查与手机速览使用同一套中文控件与信息顺序。"
+    ],
+    "rules": [
+      {
+        "name": "单一信号规则",
+        "body": "琥珀色留给主动作、当前阶段和键盘焦点；冷蓝色用于评分与日志级别。成功、错误均同时提供明确文字，不能只靠颜色判断。",
+        "section": "colors"
+      },
+      {
+        "name": "数据字形规则",
+        "body": "通用界面使用无衬线字体；日志、时间、编号与实测数值使用等宽字体和等宽数字。缺失指标显示“未记录”或“—”，不将缺失替换为零。",
+        "section": "typography"
+      },
+      {
+        "name": "平面层次规则",
+        "body": "默认无阴影。页面、操作面与输入或日志面依靠表面明度、间距和一像素边界区分，不增加发光或浮起效果。",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "沿用现有 token，新增页面保持同一套字体、边界与状态语言。",
+      "保留加载、空、错误和完整状态；错误提供重试，配置草稿在失败后继续保留。",
+      "使用显式标签、即时焦点和原生禁用语义；长标题、ID 与 URL 允许换行。",
+      "以真实工件和实际验证记录支持完成声明，视觉检查证据统一维护在 `docs/web-console/VERIFICATION.md`。"
+    ],
+    "donts": [
+      "不添加营销首屏、装饰性图表或虚构的运行指标。",
+      "不使用渐变、发光、浮动或加载入场动画强化操作台。",
+      "不把推断的筛除原因、估算额度或缺失的历史状态显示成确定事实。",
+      "不在 Markdown 中执行 HTML；不接受危险协议链接。"
+    ]
+  }
+}

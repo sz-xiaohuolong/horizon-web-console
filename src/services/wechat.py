@@ -300,8 +300,9 @@ class WeChatDeliveryResult:
 
 
 class WeChatNotifier:
-    def __init__(self, config: WeChatConfig, storage: StorageManager, console=None, icons=None):
+    def __init__(self, config: WeChatConfig, storage: StorageManager, console=None, icons=None, *, client_factory=None):
         self.config = config
+        self.client_factory = client_factory or ILinkClient
         self.console = console if console is not None else Console(stderr=True)
         self.icons = icons if icons is not None else get_icons()
         self.session_path = Path(storage.data_dir) / SESSION_FILE
@@ -319,7 +320,7 @@ class WeChatNotifier:
     def client(self) -> ILinkClient:
         if self.session is None:
             raise RuntimeError("WeChat session is not loaded")
-        return ILinkClient(self.session.base_url, self.session.bot_token)
+        return self.client_factory(self.session.base_url, self.session.bot_token)
 
     async def refresh_context(self, timeout: float = CONTEXT_REFRESH_TIMEOUT) -> bool:
         if self.session is None:
@@ -350,14 +351,15 @@ class WeChatNotifier:
         except (httpx.HTTPError, UnsafeURLError) as exc:
             logger.warning("WeChat inbox check failed; using stored context: %s", exc)
 
-    async def send_text(self, markdown_text: str, lang: str = "zh") -> WeChatDeliveryResult:
+    async def send_text(self, markdown_text: str, lang: str = "zh", *, refresh: bool = True) -> WeChatDeliveryResult:
         if not self.config.enabled:
             return WeChatDeliveryResult(WeChatDeliveryStatus.DISABLED)
         sent = 0
         try:
             # Refresh before checking readiness: login may have saved credentials before
             # the user's first message arrived.
-            await self._refresh_before_send()
+            if refresh:
+                await self._refresh_before_send()
             if self.session is None or not self.session.ready:
                 hint = (
                     "Run 'horizon-wechat login' to connect."
@@ -390,8 +392,9 @@ class WeChatNotifier:
             status, detail = WeChatDeliveryStatus.INTERNAL_FAILURE, str(exc)
         else:
             return WeChatDeliveryResult(WeChatDeliveryStatus.SUCCESS, chunks_sent=sent)
-        logger.error("WeChat delivery failed after %d messages: %s", sent, detail)
-        self.console.print(f"[red]WeChat delivery failed: {detail}[/red]")
+        # 外部错误可能包含凭据或请求内容；日志仅记录类别和已发送段数。
+        logger.error("微信推送失败，已发送 %d 段，错误类别：%s", sent, status.value)
+        self.console.print(f"[red]微信推送失败，已发送 {sent} 段（{status.value}）。[/red]")
         return WeChatDeliveryResult(status, detail, sent)
 
     async def send_daily_summary(self, summary: str, lang: str) -> WeChatDeliveryResult:

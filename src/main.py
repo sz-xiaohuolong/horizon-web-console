@@ -8,6 +8,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from rich.console import Console
+from filelock import Timeout
 
 from ._cli import add_data_dir_arguments, add_log_level_argument
 from .console_icons import get_icons
@@ -15,6 +16,7 @@ from .logging_config import configure_logging
 from .storage.manager import ConfigError, StorageManager
 from .orchestrator import HorizonOrchestrator
 from .models import AIProvider
+from .run_lock import run_lock
 
 
 console = Console(stderr=True)
@@ -106,7 +108,12 @@ def main():
 
         # Create and run orchestrator
         orchestrator = HorizonOrchestrator(config, storage, console=console)
-        asyncio.run(orchestrator.run(force_hours=args.hours))
+        try:
+            with run_lock(data_dir):
+                asyncio.run(orchestrator.run(force_hours=args.hours))
+        except Timeout:
+            console.print("[yellow]已有流水线正在运行，请等待完成后重试。[/yellow]")
+            sys.exit(1)
 
     except KeyboardInterrupt:
         console.print(f"\n[yellow]{icons['warning']} Interrupted by user[/yellow]")

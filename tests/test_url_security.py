@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import asyncio
+import socket
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+import httpx
 
 from src.url_security import UnsafeURLError, safe_request, validate_public_http_url
 
@@ -100,3 +102,42 @@ def test_public_relative_redirect_is_followed():
     assert result is success
     assert client.get.await_args_list[1].args == ("https://example.com/next",)
     assert client.get.await_args_list[1].kwargs == {"follow_redirects": False}
+
+
+@pytest.mark.parametrize("ipv6, allowed", [("2606:4700::1111", True), ("fd00::1", False)])
+def test_dns_failure_uses_https_answers_without_accepting_private_addresses(ipv6, allowed):
+    """代理可达时恢复解析，同时校验 A 和 AAAA 中的每个地址。"""
+    def answer(request):
+        kind = request.url.params["type"]
+        return httpx.Response(200, json={"Status": 0, "Answer": [{"type": 1 if kind == "A" else 28, "data": "93.184.216.34" if kind == "A" else ipv6}]})
+
+    transport = httpx.MockTransport(answer)
+    original = httpx.AsyncClient
+    with patch("src.url_security.socket.getaddrinfo", side_effect=socket.gaierror()), patch(
+        "src.url_security.httpx.AsyncClient", side_effect=lambda **kwargs: original(transport=transport, **kwargs)
+    ):
+        if allowed:
+            assert _run(validate_public_http_url("https://example.org/article"))
+        else:
+            with pytest.raises(UnsafeURLError, match="non-public"):
+                _run(validate_public_http_url("https://example.org/article"))
+
+
+def test_https_dns_failure_does_not_allow_unverified_destination():
+    transport = httpx.MockTransport(lambda request: httpx.Response(200, json={"Status": 2}))
+    original = httpx.AsyncClient
+    with patch("src.url_security.socket.getaddrinfo", side_effect=socket.gaierror()), patch(
+        "src.url_security.httpx.AsyncClient", side_effect=lambda **kwargs: original(transport=transport, **kwargs)
+    ):
+        with pytest.raises(UnsafeURLError):
+            _run(validate_public_http_url("https://example.org/article"))
+
+
+def test_slow_system_dns_uses_bounded_https_fallback():
+    async def stalled_resolver(*args, **kwargs):
+        await asyncio.sleep(10)
+    with patch('src.url_security.SYSTEM_DNS_TIMEOUT', 0.01), patch(
+        'src.url_security.asyncio.to_thread', new=stalled_resolver
+    ), patch('src.url_security._resolve_https', new=AsyncMock(return_value={'93.184.216.34'})) as fallback:
+        assert _run(validate_public_http_url('https://example.org/article'))
+        fallback.assert_awaited_once_with('example.org')

@@ -25,6 +25,8 @@ dependencies = [
     "opencc-python-reimplemented>=0.1.7",
     "trafilatura>=2.1.0",
     "qrcode>=7.4",
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.30,<1",
 ]
 
 [project.optional-dependencies]
@@ -43,6 +45,7 @@ twitter = [
 [project.scripts]
 horizon = "src.main:main"
 horizon-mcp = "src.mcp.server:main"
+horizon-web = "src.web.server:main"
 horizon-wizard = "src.setup.wizard:main"
 horizon-chatgpt = "src.setup.chatgpt:main"
 horizon-webhook = "src.services.webhook_cli:main"
